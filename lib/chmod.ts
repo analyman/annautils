@@ -1,6 +1,6 @@
-import fs   from 'fs';
-import util from 'util';
-import path from 'path';
+import * as fs   from 'fs';
+import * as util from 'util';
+import * as path from 'path';
 
 export function chmod_files(dir: string, mode: any, level: number = 1/* start with 1 */, 
                             filematch: RegExp = /.*/, cb: (err: Error, num: number) => void = null): void {

@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import { Writable } from 'stream';
 import * as util from 'util';
+import * as proc from 'process';
 
 export function fwriteToWritable(fd: number, startPosition: number, writer: Writable, length: number = -1,
                          chunksize: number = 1024, callend: boolean = true, cb: (err: Error, nbytes: number) => void = null): void //{
@@ -39,24 +40,22 @@ export function fwriteToWritable(fd: number, startPosition: number, writer: Writ
                 return wrap_cb(err || write_error, writed);
             writed += n;
             let cont: boolean = true;
-            if (n == 0) {
+            if (n != chunksize) { // last chunk
+                if (n != 0) {
+                    let lb = new Buffer(n);
+                    buf.copy(lb, 0, 0, n - 1);
+                    writer.write(lb);
+                }
                 if (writed < length)
                     return wrap_cb(new Error(`EOF but can't read length of ${length}`), writed);
                 if (callend) writer.end();
                 return wrap_cb(null, writed);
-            }
-            if (n != chunks) { // last nonempty chunk
-                let lb = new Buffer(n);
-                buf.copy(lb, 0, 0, n - 1);
-                if (callend) writer.end(lb);
-                else writer.write(lb);
-                if (writed < length)
-                    return wrap_cb(new Error(`EOF but can't read length of ${length}`), writed);
-                return wrap_cb(null, writed);
             } else
                 cont = writer.write(buf);
             if (cont)
-                func();
+                // func() will cause last chunk be writed twice in http.ServerResponse stream,
+                // but some others Writable stream haven't this problem.
+                proc.nextTick(func);
             else
                 writer.once("drain", func);
         });

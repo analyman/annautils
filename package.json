@@ -2,7 +2,7 @@
   "name": "annautils",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "build": "",
     "test": ""
@@ -10,7 +10,6 @@
   "author": "analyman",
   "license": "ISC",
   "bin": {
-      "chmodr": "bin/chmodr.js"
   },
   "dependencies": {
   },
