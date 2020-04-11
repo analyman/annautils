@@ -10,6 +10,8 @@
   "author": "analyman",
   "license": "ISC",
   "bin": {
+      "chmodr": "bin/chmodr.js",
+      "rmrf": "bin/chmodr.js"
   },
   "dependencies": {
   },

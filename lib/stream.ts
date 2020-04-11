@@ -91,3 +91,44 @@ export function writeToWritable_promisify(path: string, startPosition: number, w
     return writeToWritable_promisify_x(path, startPosition, writer, length, chunksize, callend);
 }
 
+export function fwriteToWritableSync(fd: number, startPosition: number, writer: Writable, 
+                    length: number = -1, chunksize: number = 1024, callend: boolean = true): number //{
+{
+    if (chunksize <= 0 || (length != -1 && length < 0)) {
+        throw new Error("argument error");
+    }
+    let writed: number = 0;
+    while(writed <= length || length == -1) {
+        let buf = Buffer.alloc(chunksize);
+        let chunks;
+        if (writed + chunksize <= length || length == -1)
+            chunks = chunksize;
+        else
+            chunks = length - writed;
+        let nn = fs.readSync(fd, buf, 0, chunks, writed + startPosition);
+        writed += nn;
+        if (nn == chunksize) {
+            writer.write(buf);
+        } else { // last chunk
+            if (nn != 0) {
+                let nbuf = Buffer.alloc(nn);
+                buf.copy(nbuf, 0, 0, nn);
+                writer.write(nbuf);
+            }
+            if (writed != length && length != -1)
+                throw new Error("write length error");
+            if (callend) writer.end();
+            break;
+        }
+    }
+    return writed;
+} //}
+export function writeToWritableSync(path: string, startPosition: number, writer: Writable, length: number = -1,
+                         chunksize: number = 1024, callend: boolean = true): number //{
+{
+    let fd = fs.openSync(path, "r");
+    let n = fwriteToWritableSync(fd, startPosition, writer, length, chunksize, callend);
+    fs.closeSync(fd);
+    return n;
+} //}
+
