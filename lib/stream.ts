@@ -36,14 +36,14 @@ export function fwriteToWritable(fd: number, startPosition: number, writer: Writ
         else
             chunks = chunksize;
         fs.read(fd, buf, 0, chunks, writed + startPosition, (err, n, b) => {
-            if (err != null || write_error != null)
+            if (err || write_error)
                 return wrap_cb(err || write_error, writed);
             writed += n;
             let cont: boolean = true;
             if (n != chunksize) { // last chunk
                 if (n != 0) {
                     let lb = new Buffer(n);
-                    buf.copy(lb, 0, 0, n - 1);
+                    buf.copy(lb, 0, 0, n);
                     writer.write(lb);
                 }
                 if (writed < length)
