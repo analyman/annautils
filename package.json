@@ -11,7 +11,8 @@
   "license": "ISC",
   "bin": {
       "chmodr": "bin/chmodr.js",
-      "rmrf": "bin/chmodr.js"
+      "rmrf": "bin/chmodr.js",
+      "rename": "bin/rename.js"
   },
   "dependencies": {
   },

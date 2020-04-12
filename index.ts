@@ -4,6 +4,7 @@ import * as info from './lib/info';
 import * as miscx from './lib/misc';
 import * as cproc from './lib/child_process';
 import * as rm_rf from './lib/rm_rf';
+import * as rename from './lib/files_rename';
 
 export namespace fs {
     export const chmodRecursive = chmod.chmod_files;
@@ -11,10 +12,16 @@ export namespace fs {
 
     export const removeRecusive = rm_rf.remove_rf;
 
+    export const fileRename = rename.files_rename;
+    export const fileRenameRegex = rename.files_rename_regex;
+
     export namespace promisify {
         export const chmodRecursive = chmod.chmodFiles;
         export const getStatsOfFiles = info.getStatOfFilesPromise;
         export const removeRecusive = rm_rf.remove_rf_promisify;
+
+        export const fileRename = rename.files_rename_promisify;
+        export const fileRenameRegex = rename.files_rename_regex_promisify;
     }
 }
 
