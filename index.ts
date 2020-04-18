@@ -5,6 +5,7 @@ import * as miscx from './lib/misc';
 import * as cproc from './lib/child_process';
 import * as rm_rf from './lib/rm_rf';
 import * as rename from './lib/files_rename';
+import * as mfs from './lib/fs';
 
 export namespace fs {
     export const chmodRecursive = chmod.chmod_files;
@@ -15,6 +16,10 @@ export namespace fs {
     export const fileRename = rename.files_rename;
     export const fileRenameRegex = rename.files_rename_regex;
 
+    export const touch = mfs.touch;
+
+    export const copyr = mfs.copyr;
+
     export namespace promisify {
         export const chmodRecursive = chmod.chmodFiles;
         export const getStatsOfFiles = info.getStatOfFilesPromise;
@@ -22,6 +27,10 @@ export namespace fs {
 
         export const fileRename = rename.files_rename_promisify;
         export const fileRenameRegex = rename.files_rename_regex_promisify;
+
+        export const touch = mfs.touch_promisify;
+
+        export const copyr = mfs.copyr_promisify;
     }
 }
 
