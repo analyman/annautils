@@ -9,7 +9,6 @@ export function fwriteToWritable(fd: number, startPosition: number, writer: Writ
     if (chunksize <= 0) {
         return cb(new Error("bad chunksize"), 0);
     }
-    let buf = new Buffer(chunksize);
     let writed: number = 0;
     let write_error: Error = null;
     let writer_onerror = (err) => {
@@ -35,6 +34,7 @@ export function fwriteToWritable(fd: number, startPosition: number, writer: Writ
             chunks = length - writed;
         else
             chunks = chunksize;
+        let buf = Buffer.alloc(chunks);
         fs.read(fd, buf, 0, chunks, writed + startPosition, (err, n, b) => {
             if (err || write_error)
                 return wrap_cb(err || write_error, writed);
@@ -42,7 +42,7 @@ export function fwriteToWritable(fd: number, startPosition: number, writer: Writ
             let cont: boolean = true;
             if (n != chunksize) { // last chunk
                 if (n != 0) {
-                    let lb = new Buffer(n);
+                    let lb = Buffer.alloc(n);
                     buf.copy(lb, 0, 0, n);
                     writer.write(lb);
                 }
@@ -53,8 +53,6 @@ export function fwriteToWritable(fd: number, startPosition: number, writer: Writ
             } else
                 cont = writer.write(buf);
             if (cont)
-                // func() will cause last chunk be writed twice in http.ServerResponse stream,
-                // but some others Writable stream haven't this problem.
                 proc.nextTick(func);
             else
                 writer.once("drain", func);
