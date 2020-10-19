@@ -10,12 +10,11 @@
   "author": "analyman",
   "license": "ISC",
   "bin": {
-      "chmodr": "bin/chmodr.js",
-      "rmrf": "bin/chmodr.js",
-      "rename": "bin/rename.js"
+    "chmodr": "bin/chmodr.js",
+    "rmrf": "bin/chmodr.js",
+    "rename": "bin/rename.js"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^13.11.0",
     "@types/node-getopt": "^0.2.31",
@@ -28,7 +27,7 @@
   },
   "readmeFilename": "README.md",
   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/analyman/annautils"
+    "type": "git",
+    "url": "git+https://github.com/analyman/annautils"
   }
 }

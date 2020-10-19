@@ -3,3 +3,4 @@ dist/*
 release/*
 testme/*
 gulpfile.js
+package-lock.json
